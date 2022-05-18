@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import it.lavori.gestione_ruoli.model.Ruoli;
 import it.lavori.gestione_ruoli.model.Ruolo;
-import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.repository.RuoloRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,7 @@ public class RuoloService {
 		return ruoloRepository.save(ruolo);
 	}
 	
-	public Ruolo getById(String nome) {
-		return ruoloRepository.getById(nome);
+	public Ruolo getByNome(Ruoli nome) {
+		return ruoloRepository.getByNome(nome);
 	}	
 }

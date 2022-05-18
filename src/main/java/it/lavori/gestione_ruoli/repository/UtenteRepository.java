@@ -10,4 +10,6 @@ import it.lavori.gestione_ruoli.model.Utente;
 public interface UtenteRepository extends JpaRepository<Utente,Long>{
 
 	List<Ruolo> getRuoliByCodice(Long codice);
+
+	Utente getByNome(String nome);
 }

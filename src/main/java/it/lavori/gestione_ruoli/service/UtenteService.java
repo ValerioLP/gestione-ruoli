@@ -45,4 +45,8 @@ public class UtenteService {
 	public Long getCount() {
 	    return utenteRepository.count();
 	}
+
+	public Utente getByNome(String string) {
+		return utenteRepository.getByNome(string);
+	}
 }
