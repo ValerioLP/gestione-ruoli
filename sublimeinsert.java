@@ -17,3 +17,7 @@
 		r.setNomeRuolo(Ruoli.UTENTE);
 		r.setDescrizione("Sono un Utente");
 		ruoloService.insert(r);
+
+		delete from utente_ruolo;
+		delete from utente;
+		delete from ruolo

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
+import it.lavori.gestione_ruoli.model.Ruoli;
+import it.lavori.gestione_ruoli.model.Ruolo;
 import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.service.RuoloService;
 import it.lavori.gestione_ruoli.service.UtenteService;
@@ -28,11 +30,30 @@ public class PopolaDB implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws CsvValidationException {
-//		Utente u = utenteService.getByNome("Nome1");
-//		Ruolo r = ruoloService.getByNome(Ruoli.ADMIN);
-//		u.addRuolo(r);
-//		utenteService.update(u);
 		popolaUtentiByFile("utenti.csv");
+		
+		Ruolo r = new Ruolo();
+		r.setNome(Ruoli.SUPERADMIN);
+		r.setDescrizione("Sono un SuperAdmin");
+		ruoloService.insert(r);
+		r.setNome(Ruoli.ADMIN);
+		r.setDescrizione("Sono un Admin");
+		ruoloService.insert(r);
+		r.setNome(Ruoli.UTENTE);
+		r.setDescrizione("Sono un Utente");
+		ruoloService.insert(r);
+		
+		Utente u = utenteService.getByNome("valerio");
+		Ruolo admin = new Ruolo();
+		admin = ruoloService.getByNome(Ruoli.ADMIN);
+		u.addRuolo(admin);
+		utenteService.update(u);
+		
+		Utente valerio = utenteService.getByNome("valerio");
+		Ruolo utente = new Ruolo();
+		utente = ruoloService.getByNome(Ruoli.UTENTE);
+		valerio.addRuolo(utente);
+		utenteService.update(valerio);
 	}
 	
 	public void popolaUtentiByFile(String fileName) throws CsvValidationException {
