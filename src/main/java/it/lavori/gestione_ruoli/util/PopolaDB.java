@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,6 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
 import it.lavori.gestione_ruoli.model.Ruoli;
-import it.lavori.gestione_ruoli.model.Ruolo;
 import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.service.RuoloService;
 import it.lavori.gestione_ruoli.service.UtenteService;
@@ -29,35 +30,45 @@ public class PopolaDB implements CommandLineRunner {
 	RuoloService ruoloService;
 
 	@Override
+	@Transactional
 	public void run(String... args) throws CsvValidationException {
-		popolaUtentiByFile("utenti.csv");
+//		popolaUtentiByFile("utenti.csv");
+//		
+//		Ruolo r = new Ruolo();
+//		r.setNome(Ruoli.SUPERADMIN);
+//		r.setDescrizione("Sono un SuperAdmin");
+//		ruoloService.insert(r);
+//		r.setNome(Ruoli.ADMIN);
+//		r.setDescrizione("Sono un Admin");
+//		ruoloService.insert(r);
+//		r.setNome(Ruoli.UTENTE);
+//		r.setDescrizione("Sono un Utente");
+//		ruoloService.insert(r);
+//		
+//		Utente u = utenteService.getByNome("valerio");
+//		Ruolo admin = new Ruolo();
+//		admin = ruoloService.getByNome(Ruoli.ADMIN);
+//		u.addRuolo(admin);
+//		utenteService.update(u);
+//		
+//		Utente valerio = utenteService.getByNome("valerio");
+//		Ruolo utente = new Ruolo();
+//		utente = ruoloService.getByNome(Ruoli.UTENTE);
+//		valerio.addRuolo(utente);
+//		utenteService.update(valerio);
 		
-		Ruolo r = new Ruolo();
-		r.setNome(Ruoli.SUPERADMIN);
-		r.setDescrizione("Sono un SuperAdmin");
-		ruoloService.insert(r);
-		r.setNome(Ruoli.ADMIN);
-		r.setDescrizione("Sono un Admin");
-		ruoloService.insert(r);
-		r.setNome(Ruoli.UTENTE);
-		r.setDescrizione("Sono un Utente");
-		ruoloService.insert(r);
+//		log.info(ruoloService.getAll().toString());
+//		log.info(utenteService.getAll().toString());
+//		log.info(ruoloService.findById(Ruoli.ADMIN).toString());
+//		log.info(utenteService.getRuoliByCodice(109L).toString());
+//		log.info(ruoloService.findUtentiById(Ruoli.ADMIN).toString());
 		
-		Utente u = utenteService.getByNome("valerio");
-		Ruolo admin = new Ruolo();
-		admin = ruoloService.getByNome(Ruoli.ADMIN);
-		u.addRuolo(admin);
-		utenteService.update(u);
-		
-		Utente valerio = utenteService.getByNome("valerio");
-		Ruolo utente = new Ruolo();
-		utente = ruoloService.getByNome(Ruoli.UTENTE);
-		valerio.addRuolo(utente);
-		utenteService.update(valerio);
+//		utenteService.delete(101L);
 	}
 	
 	public void popolaUtentiByFile(String fileName) throws CsvValidationException {
 		try (FileReader fr = new FileReader(fileName, StandardCharsets.UTF_8); CSVReader reader = new CSVReader(fr)) {
+			log.info("Sono all'interno di popola utenti by file");
 			String[] nextLine;
 			while ((nextLine = reader.readNext()) != null) {
 				for (String s2 : nextLine) {
@@ -70,9 +81,9 @@ public class PopolaDB implements CommandLineRunner {
 					utenteService.insert(u);
 				}
 			}
+			log.info("Ho terminato l'inserimento dei record da file");
 		} catch (IOException e) {
-			System.out.println("Errore durante l'apertura del file");
-			e.printStackTrace();
+			log.error("Errore durante l'apertura del file : --> " + e.getMessage());
 		}
 	}
 }

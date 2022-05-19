@@ -1,6 +1,9 @@
 package it.lavori.gestione_ruoli.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import it.lavori.gestione_ruoli.model.Ruolo;
@@ -38,15 +41,18 @@ public class UtenteService {
 		return utenteRepository.getById(codice);
 	}
 	
-	public List<Ruolo> getAllRuoli(Long codice) {
-		return utenteRepository.getRuoliByCodice(codice);
+	public List<Ruolo> getRuoliByCodice(Long codice) {
+		Optional<Utente> utenteOpt = utenteRepository.findById(codice);
+		List<Ruolo> lista = utenteOpt.isPresent() ? utenteOpt.get().getRuoli() : new ArrayList<Ruolo>();
+		return lista;
 	}	
 	
 	public Long getCount() {
 	    return utenteRepository.count();
 	}
 
-	public Utente getByNome(String string) {
-		return utenteRepository.getByNome(string);
+	public Utente getByNome(String nome) {
+		return utenteRepository.getByNome(nome);
 	}
+
 }

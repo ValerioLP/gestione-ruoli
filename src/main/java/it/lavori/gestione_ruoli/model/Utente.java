@@ -1,7 +1,8 @@
 package it.lavori.gestione_ruoli.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Utente {
+public class Utente implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,18 +38,20 @@ public class Utente {
     
     private String password;
     
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.PERSIST , fetch = FetchType.EAGER)
 	@JoinTable(name = "utente_ruolo", 
 		joinColumns = @JoinColumn(name = "codice_utente", referencedColumnName = "codice"), 
 		inverseJoinColumns = @JoinColumn(name = "nome_ruolo", referencedColumnName = "nome"))
-	private Set<Ruolo> ruoli = new HashSet<>();
+	private List<Ruolo> ruoli = new ArrayList<>();
 	
 	public void addRuolo(Ruolo ruolo) {
 		ruoli.add(ruolo);
+		if(!ruolo.getUtenti().contains(this)) ruolo.addUtente(this);
 	}
 	
 	public void removeRuolo(Ruolo ruolo) {
 		ruoli.remove(ruolo);
+		if(ruolo.getUtenti().contains(this)) ruolo.removeUtente(this);
 	}
 
 	@Override
