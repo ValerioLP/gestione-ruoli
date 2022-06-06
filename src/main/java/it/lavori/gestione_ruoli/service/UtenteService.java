@@ -3,56 +3,71 @@ package it.lavori.gestione_ruoli.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import org.dozer.DozerBeanMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import it.lavori.gestione_ruoli.dto.UtenteDto;
 import it.lavori.gestione_ruoli.model.Ruolo;
 import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.repository.UtenteRepository;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class UtenteService {
-	
+
 	private final UtenteRepository utenteRepository;
-	
-	public UtenteService(UtenteRepository  utenteRepository ) {
+
+	public UtenteService(UtenteRepository utenteRepository) {
 		this.utenteRepository = utenteRepository;
 	}
-	
-	public List<Utente> getAll() {
-		return utenteRepository.findAll();
+
+	@Autowired
+	private DozerBeanMapper mapper;
+
+	public List<UtenteDto> findAll() {
+		return utenteRepository.findAll().stream().map(entity -> mapper.map(entity, UtenteDto.class))
+				.collect(Collectors.toList());
 	}
 	
-	public Utente insert(Utente utente) {
-		return utenteRepository.save(utente);		
+	public UtenteDto getByCodice(Long codice) {
+		return mapper.map(utenteRepository.getById(codice), UtenteDto.class);
 	}
 	
+	public UtenteDto insert(Utente utente) {
+		return mapper.map(utenteRepository.save(utente), UtenteDto.class);
+	}
+
 	public void delete(Long codice) {
-		utenteRepository.deleteById(codice);;
+		boolean exists = utenteRepository.existsById(codice);
+		if(!exists) {
+			throw new IllegalStateException("Non esiste un utente con il codice " + codice);
+		}
+		utenteRepository.deleteById(codice);
 	}
-	
-	public Utente update(Utente utente) {
-		return utenteRepository.save(utente);
+
+	@Transactional
+	public UtenteDto update(Utente utente) {
+		boolean exists = utenteRepository.existsById(utente.getCodice());
+		if(!exists) {
+			throw new IllegalStateException("L'utente " + utente.toString() + " non esiste");
+		}
+		return mapper.map(utenteRepository.save(utente), UtenteDto.class);
 	}
-	
-	public Utente getById(Long codice) {
-		return utenteRepository.getById(codice);
-	}
-	
+
 	public List<Ruolo> getRuoliByCodice(Long codice) {
 		Optional<Utente> utenteOpt = utenteRepository.findById(codice);
-		List<Ruolo> lista = utenteOpt.isPresent() ? utenteOpt.get().getRuoli() : new ArrayList<Ruolo>();
-		return lista;
-	}	
-	
+		return utenteOpt.isPresent() ? utenteOpt.get().getRuoli() : new ArrayList<Ruolo>();
+	}
+
 	public Long getCount() {
-	    return utenteRepository.count();
+		return utenteRepository.count();
 	}
 
-	public Utente getByNome(String nome) {
-		return utenteRepository.getByNome(nome);
+	public UtenteDto getByNome(String nome) {
+		return mapper.map(utenteRepository.getByNome(nome), UtenteDto.class);
 	}
-
 }

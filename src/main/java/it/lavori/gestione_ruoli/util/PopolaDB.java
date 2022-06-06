@@ -3,6 +3,7 @@ package it.lavori.gestione_ruoli.util;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.IntStream;
 
 import javax.transaction.Transactional;
 
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-import it.lavori.gestione_ruoli.model.Ruoli;
+import it.lavori.gestione_ruoli.dto.UtenteDto;
+import it.lavori.gestione_ruoli.kafka.JsonKafkaProducer;
 import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.service.RuoloService;
 import it.lavori.gestione_ruoli.service.UtenteService;
@@ -25,15 +27,17 @@ public class PopolaDB implements CommandLineRunner {
 
 	@Autowired
 	UtenteService utenteService;
-	
+
 	@Autowired
 	RuoloService ruoloService;
+	
+	@Autowired
+	private JsonKafkaProducer jsonKafkaProducer;
 
 	@Override
 	@Transactional
 	public void run(String... args) throws CsvValidationException {
-//		popolaUtentiByFile("utenti.csv");
-//		
+//		popolaUtentiByFile("utenti.csv");//		
 //		Ruolo r = new Ruolo();
 //		r.setNome(Ruoli.SUPERADMIN);
 //		r.setDescrizione("Sono un SuperAdmin");
@@ -56,16 +60,16 @@ public class PopolaDB implements CommandLineRunner {
 //		utente = ruoloService.getByNome(Ruoli.UTENTE);
 //		valerio.addRuolo(utente);
 //		utenteService.update(valerio);
-		
+
 //		log.info(ruoloService.getAll().toString());
 //		log.info(utenteService.getAll().toString());
 //		log.info(ruoloService.findById(Ruoli.ADMIN).toString());
 //		log.info(utenteService.getRuoliByCodice(109L).toString());
 //		log.info(ruoloService.findUtentiById(Ruoli.ADMIN).toString());
-		
+
 //		utenteService.delete(101L);
 	}
-	
+
 	public void popolaUtentiByFile(String fileName) throws CsvValidationException {
 		try (FileReader fr = new FileReader(fileName, StandardCharsets.UTF_8); CSVReader reader = new CSVReader(fr)) {
 			log.info("Sono all'interno di popola utenti by file");
@@ -78,7 +82,7 @@ public class PopolaDB implements CommandLineRunner {
 					u.setCognome(valori[1]);
 					u.setEmail(valori[2]);
 					u.setPassword(valori[3]);
-					utenteService.insert(u);
+//					utenteService.insert(u);
 				}
 			}
 			log.info("Ho terminato l'inserimento dei record da file");

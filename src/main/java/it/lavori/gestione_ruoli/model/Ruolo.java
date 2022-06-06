@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +31,7 @@ public class Ruolo implements Serializable {
 
     private String descrizione;
     
+    @JsonIgnore
     @ManyToMany(mappedBy = "ruoli", fetch = FetchType.EAGER)
     private List<Utente> utenti = new ArrayList<>();
 

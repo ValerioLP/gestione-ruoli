@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.lavori.gestione_ruoli.dto.UtenteDto;
 import it.lavori.gestione_ruoli.model.Utente;
 import it.lavori.gestione_ruoli.service.UtenteService;
 
@@ -25,15 +26,20 @@ public class UtenteController {
 	Logger logger = LoggerFactory.getLogger(UtenteController.class);
 
 	@Autowired
-	UtenteService utenteService;
+	private UtenteService utenteService;
 	
 	@GetMapping("/utenti")
-	public List<Utente> getAll() {
-		return utenteService.getAll();
+	public List<UtenteDto> findAll() {
+		return utenteService.findAll();
 	}
 	
-	@PostMapping("/insertUtente")
-	public Utente insert(@RequestBody Utente utente) {
+	@GetMapping("/utente")
+	public UtenteDto getByCodice(@RequestParam Long codice) {
+		return utenteService.getByCodice(codice);
+	}
+	
+	@PostMapping("/inserisciUtente")
+	public UtenteDto insert(@RequestBody Utente utente) {
 		return utenteService.insert(utente);
 	}
 	
@@ -44,7 +50,8 @@ public class UtenteController {
 	}
 	
 	@PutMapping("/updateUtente")
-	public Utente update(@RequestBody Utente utente) {
+	public UtenteDto update(@RequestBody Utente utente) {
 		return utenteService.update(utente);
 	}
+
 }
