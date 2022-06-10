@@ -33,10 +33,14 @@ public class Utente implements Serializable{
     private String nome;
     private String cognome; 
     
+    private String userName;
+    
     @Column(unique = true)
     private String email;    
     
     private String password;
+    
+    private boolean isActive;
     
 	@ManyToMany(cascade = CascadeType.PERSIST , fetch = FetchType.EAGER)
 	@JoinTable(name = "utente_ruolo", 

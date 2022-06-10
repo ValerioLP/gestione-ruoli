@@ -16,9 +16,10 @@ public class UtenteDto {
 	private Long codice;
 	private String nome;
     private String cognome; 
+    private String userName;
     private String email;        
     private String password;
+    private boolean isActive;
     private List<Ruolo> ruoli = new ArrayList<>();
-
     
 }

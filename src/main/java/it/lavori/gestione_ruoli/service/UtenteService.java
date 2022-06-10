@@ -9,6 +9,9 @@ import javax.transaction.Transactional;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import it.lavori.gestione_ruoli.dto.UtenteDto;
@@ -32,18 +35,18 @@ public class UtenteService {
 		return utenteRepository.findAll().stream().map(entity -> mapper.map(entity, UtenteDto.class))
 				.collect(Collectors.toList());
 	}
-	
+
 	public UtenteDto getByCodice(Long codice) {
 		return mapper.map(utenteRepository.getById(codice), UtenteDto.class);
 	}
-	
+
 	public UtenteDto insert(Utente utente) {
 		return mapper.map(utenteRepository.save(utente), UtenteDto.class);
 	}
 
 	public void delete(Long codice) {
 		boolean exists = utenteRepository.existsById(codice);
-		if(!exists) {
+		if (!exists) {
 			throw new IllegalStateException("Non esiste un utente con il codice " + codice);
 		}
 		utenteRepository.deleteById(codice);
@@ -52,7 +55,7 @@ public class UtenteService {
 	@Transactional
 	public UtenteDto update(Utente utente) {
 		boolean exists = utenteRepository.existsById(utente.getCodice());
-		if(!exists) {
+		if (!exists) {
 			throw new IllegalStateException("L'utente " + utente.toString() + " non esiste");
 		}
 		return mapper.map(utenteRepository.save(utente), UtenteDto.class);
@@ -69,5 +72,22 @@ public class UtenteService {
 
 	public UtenteDto getByNome(String nome) {
 		return mapper.map(utenteRepository.getByNome(nome), UtenteDto.class);
+	}
+
+	// security
+	public Optional<Utente> findByCodice(Integer codice) {
+		return utenteRepository.findByCodice(codice);
+	}
+
+	// sorting
+	public List<UtenteDto> findUtentiBySorting(String field) {
+		return utenteRepository.findAll(Sort.by(Sort.Direction.ASC, field)).stream()
+				.map(entity -> mapper.map(entity, UtenteDto.class)).collect(Collectors.toList());
+	}
+
+	// paging
+	public Page<UtenteDto> findWithPagination(int offset, int pageSize) {
+		return utenteRepository.findAll(PageRequest.of(offset, pageSize))
+				.map(entity -> mapper.map(entity, UtenteDto.class));
 	}
 }
