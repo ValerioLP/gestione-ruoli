@@ -78,7 +78,7 @@ public class PopolaDB implements CommandLineRunner {
 		
 		
 		
-//		popolaUtentiByFile("utenti.csv");//		
+//		popolaUtentiByFile("src/main/resources/utenti.csv");//		
 //		Ruolo r = new Ruolo();
 //		r.setNome(Ruoli.SUPERADMIN);
 //		r.setDescrizione("Sono un SuperAdmin");

@@ -4,6 +4,14 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,6 +38,12 @@ public class UtenteController {
 
 	@Autowired
 	private UtenteService utenteService;
+	
+	@Autowired
+	private JobLauncher jobLauncher;
+	
+	@Autowired
+	private Job job;
 	
 	@GetMapping("/utenti")
 	public List<UtenteDto> findAll() {
@@ -67,6 +81,20 @@ public class UtenteController {
 	public APIResponse<Page<UtenteDto>> getWithSorting(@PathVariable int offset, @PathVariable int pageSize) {
 		Page<UtenteDto> utenti = utenteService.findWithPagination(offset, pageSize);
 		return new APIResponse<>(utenti.getSize(), utenti);
+	}
+	
+	@PostMapping("/importUtenti")
+	public void importCsvIntoDBJob() {
+		JobParameters jobParameters = new JobParametersBuilder()
+				.addLong("startAt", System.currentTimeMillis()).toJobParameters();
+		
+		try {
+			jobLauncher.run(job, jobParameters);
+		} catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException
+				| JobParametersInvalidException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
