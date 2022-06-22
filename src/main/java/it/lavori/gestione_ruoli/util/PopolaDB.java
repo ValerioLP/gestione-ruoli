@@ -48,33 +48,33 @@ public class PopolaDB implements CommandLineRunner {
 	@Override
 	@Transactional
 	public void run(String... args) throws CsvValidationException {
-//		BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
-//		
-//		Ruolo role_admin = new Ruolo();
-//		role_admin.setId(Ruoli.ADMIN);
-//		
-//		Utente user_admin = new Utente();
-//		user_admin.setNome("Valerio");
-//		user_admin.setCognome("Mezzoprete");
-//		user_admin.setUserName("ValerioLP");
-//		user_admin.setPassword(bCrypt.encode("password"));
-//		user_admin.setEmail("valerio@email");
-//		user_admin.addRuolo(role_admin);
-//		user_admin.setActive(true);
-//
-//		utenteRepository.save(user_admin);
-//		
-//		Ruolo role_user = new Ruolo();
-//		role_user.setId(Ruoli.UTENTE);
-//		
-//		Utente user_uimple = new Utente();
-//		user_uimple.setUserName("user");
-//		user_uimple.setPassword(bCrypt.encode("user"));
-//		user_uimple.setEmail("admin@domain.com");
-//		user_uimple.addRuolo(role_user);
-//		user_uimple.setActive(true);
-//
-//		utenteRepository.save(user_uimple);
+		BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
+		
+		Ruolo role_admin = new Ruolo();
+		role_admin.setId(Ruoli.ADMIN);
+		
+		Utente user_admin = new Utente();
+		user_admin.setNome("Valerio");
+		user_admin.setCognome("Mezzoprete");
+		user_admin.setUserName("ValerioLP");
+		user_admin.setPassword(bCrypt.encode("password"));
+		user_admin.setEmail("valerio@email");
+		user_admin.addRuolo(role_admin);
+		user_admin.setActive(true);
+
+		utenteRepository.save(user_admin);
+		
+		Ruolo role_user = new Ruolo();
+		role_user.setId(Ruoli.UTENTE);
+		
+		Utente user_uimple = new Utente();
+		user_uimple.setUserName("user");
+		user_uimple.setPassword(bCrypt.encode("user"));
+		user_uimple.setEmail("admin@domain.com");
+		user_uimple.addRuolo(role_user);
+		user_uimple.setActive(true);
+
+		utenteRepository.save(user_uimple);
 		
 		
 		

@@ -43,4 +43,8 @@
 ***************************************************************************
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 .\bin\windows\kafka-server-start.bat .\config\server.properties
-
+**************************************************************************
+portal.almaviva.it
+f.macedionio.esterno@almaviva.it
+M4gg102022
+**************************************************************************
